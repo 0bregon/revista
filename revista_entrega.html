@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Paquetes – Revista de redes y ciberseguridad</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,600&family=Unbounded:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F1F3FF; --panel:#FFFFFF; --panel2:#E4E8FF; --ink:#0A0B24; --muted:#4A5090; --line:#BFC6F2;
+  --c1:#6A85FF; --c2:#2CFFB5; --c3:#FF4D9D; --amber:#FFC933; --cy:#2BD9FF; --onk:#07081A;
+  --term:#080A24; --tline:#262B6A; --tink:#D9F4FF; --tmute:#8E97DB;
+  --display:'Unbounded','Arial Black',Impact,sans-serif;
+  --serif:'Source Serif 4',Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,'Cascadia Code',Consolas,monospace;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#070818; --panel:#0D0F2E; --panel2:#141847; --ink:#EDEFFF; --muted:#A5ACE6; --line:#2A2F70;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#070818; --panel:#0D0F2E; --panel2:#141847; --ink:#EDEFFF; --muted:#A5ACE6; --line:#2A2F70;
+  color-scheme:dark;
+}
+html{scroll-padding-top:calc(4rem + env(safe-area-inset-top,0px));scroll-behavior:smooth;height:100%}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:1.125rem;line-height:1.65;min-height:100%}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.win :focus-visible,.cover :focus-visible,.qcard :focus-visible{outline-color:var(--cy)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(1.1rem,4vw,2.5rem)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ───────── Barra superior ───────── */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;align-items:center;gap:1rem;
+  padding:.65rem clamp(1rem,3vw,2rem);background:var(--bg);background:color-mix(in srgb,var(--bg) 88%,transparent);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:2px solid var(--ink)}
+.logo{font:800 1rem var(--display);text-decoration:none;display:flex;align-items:center;gap:.55rem;letter-spacing:-.02em}
+.logo i{width:.8em;height:.8em;background:var(--c3);display:inline-block;transform:rotate(45deg);box-shadow:.35em 0 0 var(--cy)}
+.chips{display:flex;gap:.4rem;margin-left:auto}
+.chips a{font:500 .74rem var(--mono);text-decoration:none;border:2px solid var(--ink);border-radius:6px;padding:.28rem .6rem;transition:background .15s}
+.chips a:hover,.chips a[aria-current="true"]{background:var(--k);color:var(--onk);border-color:var(--onk)}
+.bar-btn{font:500 .74rem var(--mono);background:var(--panel);border:2px solid var(--ink);border-radius:6px;padding:.28rem .6rem;cursor:pointer;display:flex;gap:.5rem;align-items:center}
+.bar-btn:hover{background:var(--amber);color:var(--onk)}
+.bar-btn kbd{font:inherit;opacity:.65}
+.prog{position:absolute;left:0;bottom:-2px;height:4px;width:100%;pointer-events:none}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--c1),var(--cy),var(--c2),var(--amber),var(--c3))}
+
+/* ───────── Portada ───────── */
+.cover{--ink:#EDEFFF;position:relative;min-height:calc(100svh - 3.4rem);background:#070818;color:#EDEFFF;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(1.2rem,4vw,3rem);isolation:isolate}
+#net{position:absolute;inset:0;width:100%;height:100%;z-index:-1;cursor:crosshair;touch-action:manipulation}
+.mast{position:absolute;top:clamp(1.2rem,3vw,2rem);left:clamp(1.2rem,4vw,3rem);margin:0;font:700 .8rem var(--display);letter-spacing:.01em;pointer-events:none;max-width:22ch;line-height:1.35}
+.hud{position:absolute;top:clamp(1.2rem,3vw,2rem);right:clamp(1.2rem,4vw,3rem);font:500 .78rem var(--mono);text-align:right;color:var(--tmute);pointer-events:none;line-height:1.7}
+.hud b{color:var(--c2);font-weight:700}
+.cover-in{position:relative;pointer-events:none;max-width:1200px}
+.cover h1{font:900 clamp(2.6rem,11.6vw,9.6rem)/.95 var(--display);letter-spacing:-.045em;margin:0 0 1rem;
+  text-shadow:.028em 0 var(--c3),-.028em 0 var(--cy);word-break:keep-all}
+.typed{font:500 clamp(.85rem,1.6vw,1.05rem) var(--mono);color:var(--c2);margin:0 0 .6rem;min-height:1.6em}
+.typed::after{content:"";display:inline-block;width:.6ch;height:1.05em;background:var(--c2);vertical-align:-.15em;margin-left:2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.sub{font-size:clamp(1.15rem,2.2vw,1.55rem);font-style:italic;max-width:32ch;margin:0 0 1.4rem;color:#C7CCF5}
+.tags{display:flex;flex-wrap:wrap;gap:.5rem}
+.tags span{font:500 .78rem var(--mono);border:1.5px solid #4048A8;border-radius:5px;padding:.3rem .65rem;background:rgba(7,8,24,.6)}
+.tags span:first-child{background:var(--amber);color:var(--onk);border-color:var(--amber);font-weight:700}
+.enter{position:absolute;right:clamp(1.2rem,4vw,3rem);bottom:clamp(1.2rem,4vw,3rem);background:var(--c2);color:var(--onk);font:700 .85rem var(--mono);
+  text-decoration:none;padding:.8rem 1.1rem;border-radius:6px;box-shadow:5px 5px 0 var(--c3);transition:transform .15s,box-shadow .15s}
+.enter:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--c3)}
+.hint{position:absolute;left:clamp(1.2rem,4vw,3rem);top:calc(clamp(1.2rem,3vw,2rem) + 3.2rem);margin:0;font:400 .76rem var(--mono);color:var(--tmute);pointer-events:none;max-width:28ch}
+@media (max-width:700px){.enter{position:static;align-self:flex-start;margin-top:1.4rem}.hint{display:none}}
+
+/* Cinta */
+.ticker{background:var(--amber);color:var(--onk);overflow:hidden;border-block:2px solid var(--onk)}
+.tk{display:flex;width:max-content;animation:tk 38s linear infinite}
+.tk:hover{animation-play-state:paused}
+.tk-g{display:flex}
+.tk-g span{padding:.75rem 0 .75rem 1.5rem;font:700 .82rem var(--display);white-space:nowrap;display:flex;align-items:center}
+.tk-g span::after{content:"";width:.55em;height:.55em;background:var(--onk);margin-left:1.5rem;transform:rotate(45deg)}
+@keyframes tk{to{transform:translateX(-50%)}}
+
+/* ───────── Índice ───────── */
+.toc{padding:clamp(3rem,7vw,5.5rem) 0;background:var(--bg)}
+.toc-top{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:1.5rem;margin-bottom:2.2rem}
+.toc h2{font:800 clamp(1.9rem,5vw,3.4rem)/1 var(--display);letter-spacing:-.04em;margin:0}
+.score{min-width:min(100%,290px);font:500 .82rem var(--mono)}
+.score .meter{margin-top:.5rem;background:var(--panel2);border:2px solid var(--ink);height:14px}
+.score b{color:inherit}
+.toc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem}
+.toc-col{border:2px solid var(--ink);border-radius:10px;background:var(--panel);overflow:hidden;box-shadow:6px 6px 0 var(--k)}
+.toc-col h3{margin:0;padding:.9rem 1.1rem;background:var(--k);color:var(--onk);font:800 .98rem/1.25 var(--display);letter-spacing:-.02em}
+.toc ul{list-style:none;margin:0;padding:0}
+.toc li+li{border-top:1px solid var(--line)}
+.toc a{display:flex;align-items:center;gap:.6rem;padding:.8rem 1.1rem;text-decoration:none;font-size:1.02rem;transition:background .12s,padding .15s}
+.toc a>span:first-child{flex:1}
+.toc a:hover{background:var(--k);color:var(--onk);padding-left:1.5rem}
+.pg{font:500 .78rem var(--mono);opacity:.7}
+.ok{display:none;font:700 .68rem var(--mono);background:var(--c2);color:var(--onk);padding:.12rem .4rem;border-radius:4px}
+.is-done .ok{display:inline-block}
+@media (max-width:860px){.toc-grid{grid-template-columns:1fr}}
+
+/* ───────── Capítulos ───────── */
+.chapter{padding-bottom:1rem}
+.chap-open{background:var(--k);color:var(--onk);padding:clamp(2.5rem,6vw,4.5rem) 0;border-block:2px solid var(--ink);margin-top:clamp(2rem,5vw,3rem)}
+.chap-in{display:grid;grid-template-columns:auto 1fr;gap:clamp(1rem,4vw,3.5rem);align-items:center}
+.num{font:900 clamp(6rem,20vw,15rem)/.8 var(--display);color:transparent;-webkit-text-stroke:3px var(--onk);letter-spacing:-.06em;transition:color .3s}
+.chap-open:hover .num{color:var(--onk)}
+.chap-open h2{font:800 clamp(1.5rem,3.8vw,2.8rem)/1.08 var(--display);letter-spacing:-.035em;margin:0}
+.chap-open p{margin:1rem 0 0;font-size:1.12rem;max-width:50ch}
+@media (max-width:700px){.chap-in{grid-template-columns:1fr}.num{font-size:6rem}}
+
+/* Artículos */
+.story{padding:clamp(2.5rem,6vw,4.5rem) 0;border-top:2px solid var(--ink)}
+.wrap>.story:first-child{border-top:0}
+.story-head{display:grid;grid-template-columns:1fr auto;gap:.6rem 1rem;margin-bottom:clamp(1.4rem,3vw,2.2rem);align-items:start}
+.story-head h3{font:800 clamp(1.7rem,4.2vw,3.1rem)/1.05 var(--display);letter-spacing:-.04em;margin:0}
+.folio{font:500 .8rem var(--mono);margin:.4rem 0 0;color:var(--muted);text-align:right}
+.alias{grid-column:1/-1;justify-self:start;margin:0;font:600 .82rem var(--mono);background:var(--k);color:var(--onk);padding:.3rem .7rem;border-radius:5px}
+.story-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.18fr);gap:clamp(1.5rem,4vw,3.5rem);align-items:start}
+.story.flip .copy{order:2}
+.lead{font-size:1.2rem;margin:0}
+.lead::first-letter{float:left;font:800 2.5em/1 var(--display);background:var(--k);color:var(--onk);padding:.1em .2em;margin:.1em .3em 0 0;border-radius:6px}
+.tabs{margin-top:1.7rem}
+[role="tablist"]{display:flex;gap:.4rem}
+[role="tab"]{font:600 .8rem var(--mono);background:var(--panel);border:2px solid var(--ink);border-bottom:0;border-radius:8px 8px 0 0;padding:.5rem .9rem;cursor:pointer}
+[role="tab"][aria-selected="true"]{background:var(--k);color:var(--onk)}
+.tp{border:2px solid var(--ink);border-radius:0 8px 8px 8px;padding:1.1rem 1.3rem;background:var(--panel);font-size:1.02rem}
+.tp.q{font-size:1.18rem;font-style:italic;line-height:1.5}
+.tp[hidden]{display:none}
+
+@media (min-width:901px){.win{position:sticky;top:calc(4.6rem + env(safe-area-inset-top,0px))}}
+@media (max-width:900px){.story-grid{grid-template-columns:1fr}.story.flip .copy{order:0}}
+
+/* ───────── Ventana de simulación ───────── */
+.win{--k:var(--kk,var(--c1));background:var(--term);color:var(--tink);border:2px solid var(--k);border-radius:10px;box-shadow:8px 8px 0 var(--k);overflow:hidden;font-family:var(--mono)}
+.story .win{--kk:inherit}
+.win-bar{display:flex;align-items:center;gap:.4rem;padding:.55rem .8rem;border-bottom:1px solid var(--tline);font:500 .76rem var(--mono)}
+.win-bar i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.win-title{margin-left:.5rem;color:var(--tmute);flex:1}
+.pill{font:700 .68rem var(--mono);padding:.15rem .55rem;border-radius:99px;background:var(--tline);color:var(--tink);transition:background .2s}
+.pill.good{background:var(--c2);color:var(--onk)}
+.pill.warn{background:var(--amber);color:var(--onk)}
+.pill.bad{background:var(--c3);color:var(--onk)}
+.win-body svg,.win-body canvas{display:block;width:100%;height:auto}
+.win-body canvas{height:230px}
+.win-ctrl{display:flex;flex-wrap:wrap;gap:.6rem .9rem;align-items:center;padding:.8rem .9rem;border-top:1px solid var(--tline)}
+.btn{font:700 .78rem var(--mono);background:var(--k);color:var(--onk);border:0;border-radius:6px;padding:.6rem .9rem;cursor:pointer;transition:transform .12s,filter .12s}
+.btn:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.1)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--tink);border:1.5px solid #4048A8}
+.tog,.rng{font:500 .76rem var(--mono);display:flex;align-items:center;gap:.5rem;cursor:pointer}
+.tog input,.rng input{accent-color:var(--k)}
+.rng output{min-width:5ch;color:var(--amber)}
+.seg{display:flex;border:1.5px solid #4048A8;border-radius:6px;overflow:hidden}
+.seg button{font:600 .74rem var(--mono);background:transparent;border:0;color:var(--tink);padding:.5rem .7rem;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--k);color:var(--onk)}
+.win-log{font:400 .76rem/1.55 var(--mono);color:#BFEFFF;padding:.6rem .9rem;height:9.9em;overflow:auto;border-top:1px solid var(--tline);background:#05061A}
+.win-log div::before{content:"> ";color:var(--c2)}
+.win-log .bad,.win-log b.bad{color:var(--c3)}
+.win-log .good,.win-log b.good{color:var(--c2)}
+.win-log em{color:var(--amber);font-style:normal}
+.win-read{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--tline)}
+.win-read div{padding:.6rem .9rem;border-right:1px solid var(--tline)}
+.win-read div:last-child{border:0}
+.win-read span{display:block;font-size:.66rem;color:var(--tmute)}
+.win-read b{font:700 1.15rem var(--mono);color:var(--cy)}
+.tiles{display:flex;gap:.3rem;padding:0 .9rem .8rem}
+.tiles span{flex:1;text-align:center;font:700 .8rem var(--mono);padding:.25rem 0;border-radius:4px;background:var(--c2);color:var(--onk);transition:background .3s}
+.tiles span.no{background:var(--c3)}
+.meter{height:10px;background:#1B1F55;border-radius:6px;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--c2);transition:width .25s,background .25s}
+.meter i.mid{background:var(--amber)}.meter i.hi{background:var(--c3)}
+.win-pane{padding:.9rem}
+.win-pane[hidden]{display:none}
+.win-tabs{display:flex;gap:.3rem;padding:.6rem .9rem 0;border-bottom:1px solid var(--tline)}
+.win-tabs [role="tab"]{background:transparent;border:1.5px solid #4048A8;border-bottom:0;color:var(--tink);font-size:.74rem;padding:.4rem .8rem}
+.win-tabs [role="tab"][aria-selected="true"]{background:var(--k);color:var(--onk)}
+
+/* SVG dentro de ventanas */
+.edge{stroke:#343A8C;stroke-width:2;fill:none}
+.edge.dash{stroke-dasharray:5 6}
+.nd{fill:#12154A;stroke:var(--k);stroke-width:2}
+.rt{stroke:var(--k);stroke-width:2;fill:none;stroke-linecap:round}
+.lbl{fill:#B9C2FF;font:500 10.5px var(--mono)}
+.lbl.big{font-size:12px;fill:var(--tink)}
+.scr{fill:#1E2470;transition:fill .25s}
+.ok .scr,.scr.on{fill:var(--c2)}.wait .scr{fill:var(--amber)}.down .scr,.atk .scr{fill:var(--c3)}
+.atk .nd,.down .nd{stroke:var(--c3)}
+.pkt rect{fill:var(--amber);stroke:#07081A;stroke-width:1.5}
+.pkt text{font:700 10px var(--mono);fill:#07081A}
+.pkt.resp rect{fill:var(--c2)}.pkt.bad rect{fill:var(--c3)}.pkt.ck rect{fill:var(--amber)}.pkt.cy rect{fill:var(--cy)}
+.pkt.lost{opacity:0;transition:opacity .9s .1s}.pkt.lost rect{fill:var(--c3)}
+.pkt{pointer-events:none}
+.client{cursor:pointer}
+.client:hover .nd,.client:focus-visible .nd{stroke:var(--amber)}
+.lamp{fill:#1E2470;stroke:var(--k);stroke-width:1.5}.lamp.on{fill:var(--amber)}
+.cloud{fill:rgba(106,133,255,.06);stroke:#3A4396;stroke-width:2;stroke-dasharray:6 6}
+.pulse{fill:none;stroke:var(--amber);stroke-width:3;transform-box:fill-box;transform-origin:center;animation:pulse .9s ease-out forwards}
+@keyframes pulse{from{transform:scale(.2);opacity:1}to{transform:scale(6);opacity:0}}
+.xmark{stroke:var(--c3);stroke-width:5;stroke-linecap:round}
+
+.cam{padding:.7rem .9rem .9rem;border-top:1px solid var(--tline)}
+.cam-h{display:flex;justify-content:space-between;font:500 .72rem var(--mono);color:var(--tmute);margin-bottom:.4rem}
+.cam-h b{color:var(--cy)}
+.cells{display:grid;grid-template-columns:repeat(8,1fr);gap:.28rem}
+.cells b{font:500 .62rem var(--mono);text-align:center;padding:.3rem 0;border-radius:3px;border:1px dashed #38408F;min-height:1.75em;color:var(--tmute)}
+.cells b.real{border:1px solid var(--k);background:rgba(106,133,255,.2);color:var(--tink)}
+.cells b.fake{border:1px solid var(--c3);background:rgba(255,77,157,.25);color:#FFD0E4}
+
+.mail{background:#fff;color:#14163A;border-radius:8px;padding:1rem;font:400 .92rem/1.55 var(--serif)}
+.mail p{margin:.5rem 0}
+.mail-h{display:flex;gap:.7rem;align-items:flex-start;border-bottom:1px solid #DDE0F5;padding-bottom:.6rem;margin-bottom:.5rem;font-size:.84rem}
+.av{width:2.3rem;height:2.3rem;border-radius:50%;background:#0F5FFF;color:#fff;display:grid;place-items:center;font:700 .75rem var(--mono);flex:none}
+.flag{font:inherit;color:inherit;background:none;border:0;border-bottom:2px dashed #8790D8;padding:0;cursor:pointer;text-align:left}
+.flag:hover{background:#FFF0B3}
+.flag.found{background:var(--c3);color:#07081A;border-bottom-color:#07081A;border-radius:3px;padding:0 .2em}
+.btn-mail{background:#0F5FFF;color:#fff;padding:.5rem 1rem;border-radius:5px;display:inline-block;border:0;cursor:pointer}
+.btn-mail.found{background:var(--c3);color:#07081A;outline:2px solid #07081A}
+.finds{list-style:none;margin:.7rem 0 0;padding:0;font:400 .76rem/1.5 var(--mono);color:#BFEFFF}
+.finds li{padding:.35rem 0;border-top:1px solid var(--tline)}
+.finds li::before{content:"✓ ";color:var(--c2)}
+.count{font:500 .78rem var(--mono);margin-top:.8rem}
+.count b{color:var(--c2)}
+.fw,.ipk{font:400 .8rem/1.7 var(--mono);border:1.5px solid #4048A8;border-radius:6px;padding:.7rem .9rem;margin-bottom:.7rem}
+.fw{border-color:var(--cy)}
+code{color:var(--amber);font-family:var(--mono)}
+.verdict{font:500 .8rem/1.5 var(--mono);padding:.7rem .9rem;border-radius:6px;background:#05061A;min-height:3.6em;margin-top:.7rem}
+.verdict.bad{border-left:5px solid var(--c3)}.verdict.good{border-left:5px solid var(--c2)}
+.tokens{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--tline)}
+.tokens div{padding:.55rem .8rem;border-right:1px solid var(--tline);font:500 .7rem var(--mono);color:var(--tmute);min-width:0}
+.tokens div:last-child{border:0}
+.tokens b{display:block;color:var(--amber);font-size:.8rem;overflow-wrap:anywhere}
+.tokens b.lit{color:var(--c3)}
+
+/* ───────── Prueba ───────── */
+.quiz{padding:clamp(3.5rem,8vw,6rem) 0;background:var(--panel2);border-block:2px solid var(--ink);margin-top:clamp(3rem,7vw,5rem)}
+.sec-h{font:800 clamp(1.7rem,4.6vw,3.1rem)/1.05 var(--display);letter-spacing:-.04em;margin:0 0 .6rem}
+.intro{color:var(--muted);margin:0 0 2rem;max-width:55ch}
+.qcard{--k:var(--c1);background:var(--term);color:var(--tink);border:2px solid var(--c1);box-shadow:9px 9px 0 var(--c3);border-radius:10px;padding:clamp(1.1rem,3vw,2rem);font-family:var(--mono);max-width:820px}
+.q-top{display:flex;justify-content:space-between;align-items:center;font:500 .76rem var(--mono);color:var(--tmute);margin-bottom:1.2rem;gap:1rem;flex-wrap:wrap}
+.dots{display:flex;gap:.3rem}
+.dots i{width:.75rem;height:.75rem;border-radius:3px;background:var(--tline)}
+.dots i.now{background:var(--amber)}.dots i.y{background:var(--c2)}.dots i.n{background:var(--c3)}
+.q-t{font:italic 400 clamp(1.15rem,2.4vw,1.5rem)/1.5 var(--serif);margin:0 0 1.4rem;color:#fff}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.opt{font:600 .82rem var(--mono);text-align:left;background:transparent;color:var(--tink);border:1.5px solid #4048A8;border-radius:7px;padding:.8rem .9rem;cursor:pointer;transition:background .12s,transform .12s}
+.opt:hover:not(:disabled){background:#171B5C;transform:translateX(3px)}
+.opt.right{background:var(--c2);color:var(--onk);border-color:var(--c2)}
+.opt.wrong{background:var(--c3);color:var(--onk);border-color:var(--c3)}
+.opt:disabled{cursor:default}.opt:disabled:not(.right):not(.wrong){opacity:.45}
+.why{font:400 .82rem/1.6 var(--mono);margin:1.1rem 0 0;padding:.8rem 1rem;border-left:4px solid var(--amber);background:#05061A}
+.q-next{margin-top:1rem}
+.big-score{font:900 clamp(3rem,10vw,6rem)/1 var(--display);color:var(--c2);margin:.2rem 0 .6rem;text-shadow:.03em 0 var(--c3)}
+@media (max-width:640px){.opts{grid-template-columns:1fr}}
+
+/* ───────── Resumen ───────── */
+.compare{padding:clamp(3.5rem,8vw,6rem) 0}
+.filters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.2rem}
+.chip{font:600 .78rem var(--mono);background:var(--panel);border:2px solid var(--ink);border-radius:99px;padding:.4rem .9rem;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.tbl{overflow-x:auto;border:2px solid var(--ink);border-radius:10px;background:var(--panel);box-shadow:6px 6px 0 var(--c1)}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:1rem}
+th,td{text-align:left;padding:.85rem 1rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:700 .8rem var(--mono);background:var(--term);color:var(--tink)}
+tr.main:hover td{background:var(--panel2)}
+td:first-child{padding:.4rem .6rem}
+.rowbtn{font:700 .84rem var(--display);letter-spacing:-.02em;background:none;border:0;cursor:pointer;display:flex;align-items:center;gap:.6rem;text-align:left;padding:.4rem;border-radius:6px;width:100%}
+.rowbtn:hover{background:var(--k);color:var(--onk)}
+.dot{width:.8em;height:.8em;border-radius:3px;background:var(--k);flex:none;transition:transform .25s}
+.rowbtn[aria-expanded="true"] .dot{transform:rotate(45deg) scale(1.2)}
+.rowbtn::after{content:"+";margin-left:auto;font:700 1rem var(--mono)}
+.rowbtn[aria-expanded="true"]::after{content:"–"}
+tr.dt td{background:var(--k);color:var(--onk);font-size:1.02rem;padding:1rem 1.4rem}
+tr.dt[hidden],tr.main[hidden]{display:none}
+tr:last-child td{border-bottom:0}
+.tip{font:400 .78rem var(--mono);color:var(--muted);margin-top:.8rem}
+
+footer{background:var(--term);color:var(--tink);padding:2.5rem 0;font:500 .82rem var(--mono)}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+footer a{color:var(--c2)}
+
+/* Paleta */
+dialog{border:2px solid var(--ink);background:var(--panel);color:var(--ink);border-radius:10px;padding:0;width:min(560px,92vw);margin:12vh auto 0;box-shadow:8px 8px 0 var(--c3)}
+dialog::backdrop{background:rgba(5,6,26,.7)}
+#palQ{width:100%;font:500 1rem var(--mono);background:transparent;color:inherit;border:0;border-bottom:2px solid var(--ink);padding:1rem 1.1rem;outline:0}
+#palQ:focus-visible{outline:0;background:var(--panel2)}
+#palL{list-style:none;margin:0;padding:.4rem;max-height:50vh;overflow:auto}
+#palL li{padding:.6rem .8rem;border-radius:6px;cursor:pointer;font:500 .9rem var(--mono);display:flex;justify-content:space-between;gap:1rem}
+#palL li[aria-selected="true"]{background:var(--amber);color:var(--onk)}
+.pal-h{font:400 .72rem var(--mono);color:var(--muted);padding:.6rem 1.1rem;border-top:1px solid var(--line);margin:0}
+
+.toast{position:fixed;right:1rem;bottom:calc(1rem + env(safe-area-inset-bottom,0px));background:var(--amber);color:var(--onk);font:700 .8rem var(--mono);
+  padding:.8rem 1rem;border:2px solid var(--onk);border-radius:8px;box-shadow:5px 5px 0 var(--onk);z-index:80;transform:translateY(200%);transition:transform .35s cubic-bezier(.3,1.4,.5,1)}
+.toast.show{transform:none}
+
+@media (max-width:760px){.chips{display:none}.bar-btn{margin-left:auto}.bar-btn kbd{display:none}}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .tk{animation:none}.typed::after{animation:none}.pulse{animation:none;opacity:0}
+  *{transition-duration:.01ms !important}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <a class="logo" href="#portada"><i></i>paquetes</a>
+  <nav class="chips" aria-label="Capítulos">
+    <a href="#cap1" style="--k:var(--c1)">Cap. 1</a>
+    <a href="#cap2" style="--k:var(--c2)">Cap. 2</a>
+    <a href="#cap3" style="--k:var(--c3)">Cap. 3</a>
+    <a href="#quiz" style="--k:var(--amber)">Prueba</a>
+    <a href="#resumen" style="--k:var(--cy)">Resumen</a>
+  </nav>
+  <button class="bar-btn" id="cmdBtn" aria-haspopup="dialog">Ir a… <kbd>Ctrl K</kbd></button>
+  <button class="bar-btn" id="themeBtn" aria-label="Cambiar entre tema claro y oscuro">Tema</button>
+  <div class="prog" aria-hidden="true"><i id="progBar"></i></div>
+</header>
+
+<div class="cover" id="portada">
+  <canvas id="net" aria-hidden="true"></canvas>
+  <p class="mast">Revista de redes y ciberseguridad</p>
+  <div class="hud" aria-hidden="true">paquetes entregados <b id="pktCount">0</b><br>saltos promedio <b id="hopAvg">0.0</b></div>
+  <p class="hint" aria-hidden="true">Haz clic en un nodo de la red y mira cómo viaja un paquete.</p>
+  <div class="cover-in">
+    <p class="typed" id="typed" aria-hidden="true"></p>
+    <h1 id="title" aria-label="Paquetes"><span aria-hidden="true" id="titleTxt">Paquetes</span></h1>
+    <p class="sub">Cómo viajan los datos, y cómo intentan interceptarlos.</p>
+    <div class="tags"><span>Semana 7</span><span>Siete conceptos explicados con analogías</span></div>
+  </div>
+  <a class="enter" href="#indice">Entrar al número</a>
+</div>
+
+<div class="ticker" aria-hidden="true">
+  <div class="tk">
+    <div class="tk-g"><span>Protocolos TCP/IP</span><span>Cliente/servidor</span><span>Overflow del CAM</span><span>Smurfing</span><span>DoS y DDoS</span><span>Spoofing</span><span>Secuestro de sesiones</span></div>
+    <div class="tk-g"><span>Protocolos TCP/IP</span><span>Cliente/servidor</span><span>Overflow del CAM</span><span>Smurfing</span><span>DoS y DDoS</span><span>Spoofing</span><span>Secuestro de sesiones</span></div>
+  </div>
+</div>
+
+<nav class="toc" id="indice" aria-labelledby="t-indice">
+  <div class="wrap">
+    <div class="toc-top">
+      <h2 id="t-indice">En este número</h2>
+      <div class="score">Has probado <b id="doneCount">0</b> de 7 simulaciones<div class="meter"><i id="doneBar"></i></div></div>
+    </div>
+    <div class="toc-grid">
+      <div class="toc-col" style="--k:var(--c1)">
+        <h3>Fundamentos de conectividad</h3>
+        <ul>
+          <li><a href="#tcpip" data-done="tcpip"><span>Los protocolos TCP/IP</span><span class="ok">probado</span><span class="pg">p. 4</span></a></li>
+          <li><a href="#cliente" data-done="cliente"><span>El modelo cliente/servidor</span><span class="ok">probado</span><span class="pg">p. 5</span></a></li>
+        </ul>
+      </div>
+      <div class="toc-col" style="--k:var(--c2)">
+        <h3>Vulnerabilidades en la red local</h3>
+        <ul>
+          <li><a href="#cam" data-done="cam"><span>Overflow del CAM</span><span class="ok">probado</span><span class="pg">p. 7</span></a></li>
+          <li><a href="#smurf" data-done="smurf"><span>Smurfing</span><span class="ok">probado</span><span class="pg">p. 8</span></a></li>
+        </ul>
+      </div>
+      <div class="toc-col" style="--k:var(--c3)">
+        <h3>Amenazas y ataques comunes</h3>
+        <ul>
+          <li><a href="#dos" data-done="dos"><span>Denegación de servicio (DoS y DDoS)</span><span class="ok">probado</span><span class="pg">p. 10</span></a></li>
+          <li><a href="#spoofing" data-done="spoofing"><span>Spoofing</span><span class="ok">probado</span><span class="pg">p. 11</span></a></li>
+          <li><a href="#hijack" data-done="hijack"><span>Secuestro de sesiones</span><span class="ok">probado</span><span class="pg">p. 12</span></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<!-- CAPÍTULO 1 -->
+<section class="chapter" id="cap1" style="--k:var(--c1)" aria-labelledby="h-cap1">
+  <div class="chap-open"><div class="wrap chap-in">
+    <div class="num" aria-hidden="true">1</div>
+    <div>
+      <h2 id="h-cap1">Fundamentos de conectividad y arquitectura</h2>
+      <p>Antes de hablar de ataques hay que entender cómo se hablan las máquinas y quién le pide qué a quién.</p>
+    </div>
+  </div></div>
+  <div class="wrap">
+    <article class="story" id="tcpip" data-done="tcpip" data-title="Los protocolos TCP/IP">
+      <header class="story-head"><h3>Los protocolos TCP/IP</h3><p class="folio">p. 4</p><p class="alias">El idioma común de internet</p></header>
+      <div class="story-grid">
+        <div class="copy">
+          <p class="lead">Es el conjunto de reglas estándar que permite que las computadoras se comuniquen a través de internet. Se divide en dos funciones clave: IP se encarga de direccionar y llevar el paquete de datos al destino correcto, y TCP garantiza que los datos lleguen completos, ordenados y sin errores.</p>
+          <div class="tabs">
+            <div class="tp q" data-label="La analogía">El servicio postal tradicional. La dirección escrita en el sobre es la IP; el acuse de recibo, con el que el cartero verifica que todas las páginas llegaron en orden y sin faltantes, es TCP.</div>
+            <div class="tp" data-label="En la práctica">Cuando descargas una imagen, TCP la divide en pequeños fragmentos y verifica que ninguno se pierda en el camino, mientras IP guía cada fragmento de router en router hasta tu computadora.</div>
+          </div>
+        </div>
+        <div class="win" data-sim="tcp"></div>
+      </div>
+    </article>
+
+    <article class="story flip" id="cliente" data-done="cliente" data-title="El modelo cliente/servidor">
+      <header class="story-head"><h3>El modelo cliente/servidor</h3><p class="folio">p. 5</p><p class="alias">Quien pide y quien atiende</p></header>
+      <div class="story-grid">
+        <div class="copy">
+          <p class="lead">Es una arquitectura de red donde una máquina o software, el cliente, solicita un recurso o servicio, y otra máquina muy potente, el servidor, procesa la solicitud y devuelve la respuesta.</p>
+          <div class="tabs">
+            <div class="tp q" data-label="La analogía">Un restaurante. El cliente es el comensal que revisa el menú y hace el pedido al mesero (la solicitud); la cocina es el servidor que procesa los ingredientes y entrega el plato listo (la respuesta).</div>
+            <div class="tp" data-label="En la práctica">Tu teléfono inteligente (cliente) abre la aplicación de YouTube para ver un video, y los centros de datos globales de Google (servidor) transmiten el flujo de video a tu pantalla.</div>
+          </div>
+        </div>
+        <div class="win" data-sim="cs"></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- CAPÍTULO 2 -->
+<section class="chapter" id="cap2" style="--k:var(--c2)" aria-labelledby="h-cap2">
+  <div class="chap-open"><div class="wrap chap-in">
+    <div class="num" aria-hidden="true">2</div>
+    <div>
+      <h2 id="h-cap2">Vulnerabilidades en redes locales</h2>
+      <p>La capa de enlace: el nivel donde los switches deciden quién recibe qué dentro de la misma red.</p>
+    </div>
+  </div></div>
+  <div class="wrap">
+    <article class="story" id="cam" data-done="cam" data-title="Overflow del CAM">
+      <header class="story-head"><h3>Overflow del CAM</h3><p class="folio">p. 7</p><p class="alias">Desbordamiento de la tabla CAM, o MAC flooding</p></header>
+      <div class="story-grid">
+        <div class="copy">
+          <p class="lead">Es un ataque dirigido a los switches. El atacante inunda la memoria interna del equipo (la tabla CAM) con miles de direcciones MAC falsas hasta colapsarla. Sin espacio, el switch deja de ser inteligente y empieza a comportarse como un hub básico, enviando todo el tráfico a todos los puertos.</p>
+          <div class="tabs">
+            <div class="tp q" data-label="La analogía">Un guardia de seguridad en una discoteca cuya libreta de invitados se llena de nombres falsos. Al desbordarse la libreta y no poder verificar quién es quién, abre las puertas y deja entrar a todos sin control, y cualquiera puede escuchar conversaciones privadas.</div>
+            <div class="tp" data-label="En la práctica">Un atacante conecta un software en una red corporativa para saturar la tabla del switch y así capturar contraseñas o tráfico de otros empleados que pasa por su puerto.</div>
+          </div>
+        </div>
+        <div class="win" data-sim="cam"></div>
+      </div>
+    </article>
+
+    <article class="story flip" id="smurf" data-done="smurf" data-title="Smurfing">
+      <header class="story-head"><h3>Smurfing</h3><p class="folio">p. 8</p><p class="alias">Ataque Smurf</p></header>
+      <div class="story-grid">
+        <div class="copy">
+          <p class="lead">Es un ataque clásico de denegación de servicio. El atacante envía un paquete de eco (ping) a la dirección de difusión (broadcast) de una red, usando como origen la IP falsificada de la víctima. Como resultado, todos los equipos de esa red responden masivamente a la víctima y la saturan.</p>
+          <div class="tabs">
+            <div class="tp q" data-label="La analogía">Alguien entra a una plaza llena de gente y grita una pregunta con un megáfono, pero finge ser otra persona. Toda la plaza responde al mismo tiempo a gritos, ensordeciendo a la persona cuyo nombre fue usurpado.</div>
+            <div class="tp" data-label="En la práctica">Un atacante envía un ping masivo a una red externa haciendo creer que el servidor de una universidad lo solicita; miles de computadoras responden al servidor universitario y lo colapsan.</div>
+          </div>
+        </div>
+        <div class="win" data-sim="smurf"></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- CAPÍTULO 3 -->
+<section class="chapter" id="cap3" style="--k:var(--c3)" aria-labelledby="h-cap3">
+  <div class="chap-open"><div class="wrap chap-in">
+    <div class="num" aria-hidden="true">3</div>
+    <div>
+      <h2 id="h-cap3">Amenazas y ataques comunes</h2>
+      <p>Tres técnicas que buscan tumbar servicios, engañar a personas o tomar el control de una sesión ajena.</p>
+    </div>
+  </div></div>
+  <div class="wrap">
+    <article class="story" id="dos" data-done="dos" data-title="Denegación de servicio (DoS y DDoS)">
+      <header class="story-head"><h3>Denegación de servicio</h3><p class="folio">p. 10</p><p class="alias">DoS y DDoS</p></header>
+      <div class="story-grid">
+        <div class="copy">
+          <p class="lead">Es un ataque diseñado para que un servidor, sitio web o servicio de red sea inaccesible para los usuarios legítimos, saturándolo con un volumen abrumador de tráfico o peticiones falsas. Si se realiza desde miles de computadoras distribuidas por el mundo, se llama DDoS (denegación de servicio distribuida).</p>
+          <div class="tabs">
+            <div class="tp q" data-label="La analogía">Cientos de personas bloqueando la entrada principal de un banco de forma intencional para que ningún cliente real pueda entrar a hacer sus trámites.</div>
+            <div class="tp" data-label="En la práctica">Un portal de comercio electrónico recibe millones de solicitudes por segundo, de forma maliciosa, durante un evento de rebajas como el Black Friday. El servidor cae y ningún cliente puede comprar.</div>
+          </div>
+        </div>
+        <div class="win" data-sim="dos"></div>
+      </div>
+    </article>
+
+    <article class="story flip" id="spoofing" data-done="spoofing" data-title="Spoofing">
+      <header class="story-head"><h3>Spoofing</h3><p class="folio">p. 11</p><p class="alias">Suplantación de identidad</p></header>
+      <div class="story-grid">
+        <div class="copy">
+          <p class="lead">Es una técnica donde un atacante oculta su identidad real haciéndose pasar por un dispositivo, una dirección IP o un usuario legítimo dentro de una red, para ganar confianza o acceso indebido.</p>
+          <div class="tabs">
+            <div class="tp q" data-label="La analogía">Alguien que utiliza una identificación falsa o un uniforme corporativo robado para ingresar a un área restringida de una empresa, haciéndose pasar por un técnico de confianza.</div>
+            <div class="tp" data-label="En la práctica">Recibes un correo que aparenta ser de tu banco oficial, con la misma estética y logotipo, pidiéndote verificar tus credenciales de acceso. También existe el spoofing técnico: un paquete de red con una dirección IP falsa para burlar el cortafuegos.</div>
+          </div>
+        </div>
+        <div class="win" data-sim="spoof"></div>
+      </div>
+    </article>
+
+    <article class="story" id="hijack" data-done="hijack" data-title="Secuestro de sesiones">
+      <header class="story-head"><h3>Secuestro de sesiones</h3><p class="folio">p. 12</p><p class="alias">Session hijacking</p></header>
+      <div class="story-grid">
+        <div class="copy">
+          <p class="lead">Es el robo o la suplantación del identificador de sesión (session ID) de un usuario legítimo. Una vez que el usuario inicia sesión de forma segura, el atacante intercepta ese token y controla la sesión activa sin necesidad de conocer la contraseña.</p>
+          <div class="tabs">
+            <div class="tp q" data-label="La analogía">Robarle la tarjeta digital de acceso a la habitación de un hotel a un huésped que ya abrió la puerta y entró. Una vez dentro, puedes hacerte pasar por el dueño legítimo.</div>
+            <div class="tp" data-label="En la práctica">Un atacante conectado a la misma red Wi-Fi pública y no segura intercepta la cookie de sesión de un usuario que navega en su red social, y entra a su perfil sin pedir clave.</div>
+          </div>
+        </div>
+        <div class="win" data-sim="hijack"></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- PRUEBA -->
+<section class="quiz" id="quiz" aria-labelledby="t-quiz">
+  <div class="wrap">
+    <h2 class="sec-h" id="t-quiz">¿Qué analogía es cuál?</h2>
+    <p class="intro">Lee la escena y elige el concepto al que corresponde. Siete preguntas, una por cada artículo.</p>
+    <div class="qcard" id="quizBox"></div>
+  </div>
+</section>
+
+<!-- RESUMEN -->
+<section class="compare" id="resumen" aria-labelledby="t-res">
+  <div class="wrap">
+    <h2 class="sec-h" id="t-res">Los cinco ataques, de un vistazo</h2>
+    <p class="intro">Una tabla para repasar qué hace cada uno y con qué situación cotidiana se compara. Abre una fila para ver cómo se frena.</p>
+    <div class="filters" role="group" aria-label="Filtrar ataques">
+      <button class="chip" aria-pressed="true" data-f="all">Todos</button>
+      <button class="chip" aria-pressed="false" data-f="local">Red local</button>
+      <button class="chip" aria-pressed="false" data-f="amenazas">Amenazas comunes</button>
+    </div>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Ataque</th><th>Qué busca</th><th>Se parece a…</th></tr></thead>
+        <tbody>
+          <tr class="main" data-ch="local" style="--k:var(--c2)"><td><button class="rowbtn" aria-expanded="false"><span class="dot"></span>Overflow del CAM</button></td><td>Saturar la tabla del switch para que reenvíe todo por todos los puertos y poder espiar el tráfico.</td><td>El guardia con la libreta de invitados llena de nombres falsos.</td></tr>
+          <tr class="dt" data-ch="local" style="--k:var(--c2)" hidden><td colspan="3"><b>Cómo se frena:</b> limitar cuántas direcciones MAC puede aprender cada puerto (port security) y alertar cuando aparecen muchas nuevas de golpe.</td></tr>
+          <tr class="main" data-ch="local" style="--k:var(--c2)"><td><button class="rowbtn" aria-expanded="false"><span class="dot"></span>Smurfing</button></td><td>Que toda una red responda a la víctima y la sature.</td><td>El grito con megáfono fingiendo ser otra persona.</td></tr>
+          <tr class="dt" data-ch="local" style="--k:var(--c2)" hidden><td colspan="3"><b>Cómo se frena:</b> desactivar el reenvío de broadcast dirigido en los routers y filtrar el ICMP que llega a direcciones de difusión.</td></tr>
+          <tr class="main" data-ch="amenazas" style="--k:var(--c3)"><td><button class="rowbtn" aria-expanded="false"><span class="dot"></span>DoS / DDoS</button></td><td>Dejar un servicio inaccesible con un volumen abrumador de peticiones.</td><td>Cientos de personas bloqueando la puerta de un banco.</td></tr>
+          <tr class="dt" data-ch="amenazas" style="--k:var(--c3)" hidden><td colspan="3"><b>Cómo se frena:</b> filtrar el tráfico sospechoso, limitar las peticiones por origen y apoyarse en redes de distribución que absorben el pico.</td></tr>
+          <tr class="main" data-ch="amenazas" style="--k:var(--c3)"><td><button class="rowbtn" aria-expanded="false"><span class="dot"></span>Spoofing</button></td><td>Hacerse pasar por un dispositivo, IP o usuario legítimo.</td><td>Un uniforme de técnico robado.</td></tr>
+          <tr class="dt" data-ch="amenazas" style="--k:var(--c3)" hidden><td colspan="3"><b>Cómo se frena:</b> filtros anti-suplantación en el router, autenticación del correo (SPF, DKIM y DMARC) y desconfiar de los mensajes urgentes.</td></tr>
+          <tr class="main" data-ch="amenazas" style="--k:var(--c3)"><td><button class="rowbtn" aria-expanded="false"><span class="dot"></span>Secuestro de sesiones</button></td><td>Controlar una sesión activa robando su identificador.</td><td>La tarjeta del hotel robada a un huésped que ya entró.</td></tr>
+          <tr class="dt" data-ch="amenazas" style="--k:var(--c3)" hidden><td colspan="3"><b>Cómo se frena:</b> usar siempre HTTPS, cookies con Secure y HttpOnly, y sesiones que caducan o se invalidan al cerrar sesión.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Paquetes, revista de redes y ciberseguridad</span>
+    <a href="#portada">Volver a la portada</a>
+  </div>
+</footer>
+
+<dialog id="pal" aria-label="Ir a una sección">
+  <input id="palQ" placeholder="Escribe para buscar un artículo" aria-label="Buscar sección" autocomplete="off">
+  <ul id="palL" role="listbox" aria-label="Resultados"></ul>
+  <p class="pal-h">Flechas para moverte, Enter para ir, Esc para cerrar</p>
+</dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+'use strict';
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const NS='http://www.w3.org/2000/svg';
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const hex=n=>Array.from({length:n},()=>rnd(0,15).toString(16)).join('');
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const svgEl=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in (a||{}))e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+const G=p=>svgEl('g',{},p);
+
+/* ───────── Progreso de simulaciones ───────── */
+const TOTAL=7;
+let done=new Set(store.get('paquetes:done',[]));
+const toastEl=$('#toast');let toastT;
+function toast(msg){toastEl.textContent=msg;toastEl.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>toastEl.classList.remove('show'),2600)}
+function renderDone(){
+  $$('[data-done]').forEach(e=>e.classList.toggle('is-done',done.has(e.dataset.done)));
+  $('#doneCount').textContent=done.size;
+  $('#doneBar').style.width=(done.size/TOTAL*100)+'%';
+}
+function markDone(id){
+  if(done.has(id))return;
+  done.add(id);store.set('paquetes:done',[...done]);renderDone();
+  toast(done.size===TOTAL?'Completaste las 7 simulaciones':'Simulación completada: '+done.size+' de '+TOTAL);
+}
+
+/* ───────── Tema ───────── */
+const themeBtn=$('#themeBtn');
+const savedTheme=store.get('paquetes:theme',null);
+if(savedTheme)document.documentElement.setAttribute('data-theme',savedTheme);
+themeBtn.addEventListener('click',()=>{
+  const cur=document.documentElement.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  const next=cur==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);store.set('paquetes:theme',next);
+});
+
+/* ───────── Pestañas (analogía / práctica) ───────── */
+$$('.tabs').forEach((t,ti)=>{
+  const panels=$$('.tp',t);const list=document.createElement('div');list.setAttribute('role','tablist');list.setAttribute('aria-label','Explicación');
+  const tabs=panels.map((p,i)=>{
+    const b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.id='tb'+ti+'-'+i;b.textContent=p.dataset.label;
+    p.setAttribute('role','tabpanel');p.id='tp'+ti+'-'+i;p.setAttribute('aria-labelledby',b.id);b.setAttribute('aria-controls',p.id);
+    list.appendChild(b);return b;
+  });
+  t.insertBefore(list,panels[0]);
+  const sel=i=>{tabs.forEach((b,j)=>{b.setAttribute('aria-selected',j===i);b.tabIndex=j===i?0:-1;panels[j].hidden=j!==i})};
+  tabs.forEach((b,i)=>{
+    b.addEventListener('click',()=>sel(i));
+    b.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const n=(i+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;sel(n);tabs[n].focus()}});
+  });
+  sel(0);
+});
+
+/* ───────── Helpers de simulación ───────── */
+function bar(title){return '<div class="win-bar"><i style="background:var(--c3)"></i><i style="background:var(--amber)"></i><i style="background:var(--c2)"></i><span class="win-title">'+title+'</span><span class="pill" data-pill>listo</span></div>'}
+function pill(root,txt,cls){const p=$('[data-pill]',root);p.textContent=txt;p.className='pill '+(cls||'')}
+function mkLog(root){const box=$('.win-log',root);return (msg,cls)=>{const d=document.createElement('div');if(cls)d.className=cls;d.innerHTML=msg;box.appendChild(d);while(box.children.length>7)box.firstChild.remove();box.scrollTop=box.scrollHeight}}
+function clear(g){while(g.firstChild)g.firstChild.remove()}
+function txt(p,x,y,s,cls,anchor){const t=svgEl('text',{class:cls||'lbl',x:x,y:y,'text-anchor':anchor||'middle'},p);t.textContent=s;return t}
+function host(p,pt,label,cls){const g=svgEl('g',{class:'hst '+(cls||'')},p);
+  svgEl('rect',{class:'nd',x:pt.x-20,y:pt.y-14,width:40,height:28,rx:5},g);
+  svgEl('rect',{class:'scr',x:pt.x-14,y:pt.y-9,width:28,height:16,rx:2},g);
+  txt(g,pt.x,pt.y+30,label);return g}
+function router(p,pt){const g=G(p);svgEl('circle',{class:'nd',cx:pt.x,cy:pt.y,r:13},g);svgEl('path',{class:'rt',d:'M'+(pt.x-6)+' '+pt.y+'h12M'+pt.x+' '+(pt.y-6)+'v12'},g);return g}
+function line(p,a,b,cls){return svgEl('line',{class:'edge '+(cls||''),x1:a.x,y1:a.y,x2:b.x,y2:b.y},p)}
+function fly(layer,pts,ms,o){o=o||{};
+  const g=svgEl('g',{class:'pkt '+(o.cls||'')},layer);
+  svgEl('rect',{x:-11,y:-8,width:22,height:16,rx:3},g);
+  if(o.label!=null){txt(g,0,3.5,o.label,'')}
+  const seg=[];let L=0;for(let i=1;i<pts.length;i++){const d=Math.hypot(pts[i].x-pts[i-1].x,pts[i].y-pts[i-1].y);seg.push(d);L+=d}
+  const at=k=>{let d=k*L,i=0;while(i<seg.length-1&&d>seg[i]){d-=seg[i];i++}const f=seg[i]?Math.min(1,d/seg[i]):1;return{x:pts[i].x+(pts[i+1].x-pts[i].x)*f,y:pts[i].y+(pts[i+1].y-pts[i].y)*f}};
+  const p=new Promise(res=>{const t0=performance.now();
+    (function step(now){const k=Math.min(1,Math.max(0,(now-t0)/ms));const q=at(k);g._x=q.x;g._y=q.y;g.setAttribute('transform','translate('+q.x+' '+q.y+')');
+      if(o.cut!=null&&k>=o.cut){g.classList.add('lost');return res('lost')}
+      if(k<1)requestAnimationFrame(step);else{if(!o.keep)g.remove();res('arrived')}})(t0);
+  });
+  return{g:g,p:p};
+}
+function onVisible(el,cb){if(!('IntersectionObserver' in window)){cb(true);return}new IntersectionObserver(es=>cb(es[0].isIntersecting)).observe(el)}
+
+/* ═════════ SIM 1: TCP/IP ═════════ */
+function simTCP(root,id){
+  root.innerHTML=bar('tcp-ip.sim')+'<div class="win-body"><svg viewBox="0 0 480 320" role="img" aria-label="Simulación: un archivo se divide en seis paquetes numerados que viajan por routers distintos y TCP los reordena en el destino"></svg></div>'+
+  '<div class="win-ctrl"><button class="btn" data-go>Enviar archivo</button><label class="tog"><input type="checkbox" data-loss> Perder paquetes en el camino</label></div><div class="win-log" role="log"></div>';
+  const svg=$('svg',root),log=mkLog(root),go=$('[data-go]',root);
+  const src={x:44,y:135},A=[{x:168,y:52},{x:168,y:135},{x:168,y:218}],B=[{x:302,y:90},{x:302,y:180}],dst={x:436,y:135};
+  const eL=G(svg),nL=G(svg),sL=G(svg),pL=G(svg);
+  A.forEach(a=>{line(eL,src,a);B.forEach(b=>line(eL,a,b))});B.forEach(b=>line(eL,b,dst));
+  host(nL,src,'Origen');host(nL,dst,'Destino');A.concat(B).forEach(r=>router(nL,r));
+  txt(nL,235,20,'IP elige la ruta de cada paquete');
+  const cap=txt(sL,240,266,'Buffer de TCP en el destino','lbl big');
+  const sx=i=>90+i*60,sy=294;
+  for(let i=0;i<6;i++)svgEl('rect',{x:sx(i)-23,y:sy-13,width:46,height:26,rx:4,fill:'none',stroke:'#38408F','stroke-dasharray':'4 4'},sL);
+  function slide(g,x,y){
+    if(!g._css){g._css=1;g.removeAttribute('transform');g.style.transition='none';g.style.transform='translate('+g._x+'px,'+g._y+'px)';g.getBoundingClientRect()}
+    g.style.transition='transform .7s cubic-bezier(.3,1.25,.5,1)';g.style.transform='translate('+x+'px,'+y+'px)';
+  }
+  let busy=false;
+  async function send(){
+    if(busy)return;busy=true;go.disabled=true;clear(pL);cap.textContent='Buffer de TCP en el destino';pill(root,'enviando','warn');
+    const lose=$('[data-loss]',root).checked,order=[],pk={};
+    log('TCP divide el archivo en <em>6 paquetes</em>');
+    async function deliver(n,retry){
+      const a=rnd(0,2),b=rnd(0,1),willLose=lose&&!retry&&Math.random()<.45;
+      const f=fly(pL,[src,A[a],B[b],dst],1500+Math.random()*1800,{label:n,cut:willLose?.6:null,keep:true});
+      const r=await f.p;
+      if(r==='lost'){log('paquete <b class="bad">#'+n+'</b> perdido en el camino');await sleep(1000);f.g.remove();log('TCP no recibió el acuse de #'+n+': <em>lo retransmite</em>');return deliver(n,true)}
+      order.push(n);pk[n]=f.g;slide(f.g,sx(order.length-1),sy);
+      log('llega #'+n+(retry?' (retransmitido)':'')+' en la posición '+order.length);
+    }
+    await Promise.all([1,2,3,4,5,6].map((n,i)=>sleep(i*260).then(()=>deliver(n,false))));
+    const sorted=order.every((v,i)=>v===i+1);
+    cap.textContent='Llegaron así: '+order.join(' ');
+    await sleep(900);
+    if(sorted)log('esta vez llegaron en orden. Prueba de nuevo','good');
+    else log('TCP reordena: <b class="good">1 2 3 4 5 6</b>');
+    cap.textContent='TCP reordenó el archivo completo';
+    for(let n=1;n<=6;n++)slide(pk[n],sx(n-1),sy);
+    pill(root,'entregado','good');markDone(id);go.disabled=false;busy=false;
+  }
+  go.addEventListener('click',send);
+  log('pulsa <em>Enviar archivo</em> y activa la pérdida de paquetes para ver a TCP trabajar');
+}
+
+/* ═════════ SIM 2: Cliente / Servidor ═════════ */
+function simCS(root,id){
+  root.innerHTML=bar('cliente-servidor.sim')+'<div class="win-body"><svg viewBox="0 0 480 300" role="img" aria-label="Simulación: tres teléfonos piden un video a un servidor que atiende dos solicitudes a la vez"></svg></div>'+
+  '<div class="win-ctrl"><button class="btn" data-all>Pedir desde los 3 clientes</button><button class="btn ghost" data-burst>Ráfaga de 12 solicitudes</button><label class="rng">Distancia <input type="range" min="150" max="1200" step="50" value="500" data-lat aria-label="Latencia en milisegundos"><output data-latv>500 ms</output></label></div><div class="win-log" role="log"></div>';
+  const svg=$('svg',root),log=mkLog(root),latI=$('[data-lat]',root),latO=$('[data-latv]',root);
+  const lat=()=>+latI.value;latI.addEventListener('input',()=>latO.textContent=latI.value+' ms');
+  const eL=G(svg),nL=G(svg),pL=G(svg),srvIn={x:352,y:150};
+  const cl=[60,150,240].map((y,i)=>({y:y,i:i,out:{x:80,y:y},pend:0,ok:false}));
+  cl.forEach(c=>line(eL,c.out,srvIn));
+  svgEl('rect',{class:'nd',x:352,y:62,width:92,height:176,rx:8},nL);
+  [0,1,2].forEach(i=>svgEl('rect',{x:364,y:108+i*40,width:68,height:28,rx:4,fill:'#1E2470'},nL));
+  const lamps=[376,420].map(x=>svgEl('circle',{class:'lamp',cx:x,cy:84,r:6},nL));
+  const qt=txt(nL,398,222,'cola 0');
+  txt(nL,398,262,'Servidor','lbl big');txt(nL,398,278,'(la cocina)');
+  cl.forEach(c=>{
+    const g=svgEl('g',{class:'client hst',tabindex:0,role:'button','aria-label':'Cliente '+(c.i+1)+': pedir un video'},nL);c.g=g;
+    svgEl('rect',{class:'nd',x:c.out.x-40,y:c.y-28,width:32,height:56,rx:7},g);
+    svgEl('rect',{class:'scr',x:c.out.x-35,y:c.y-22,width:22,height:36,rx:2},g);
+    txt(g,c.out.x-24,c.y+42,'Cliente '+(c.i+1));
+    const go=()=>req(c);g.addEventListener('click',go);g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}});
+  });
+  cl.forEach(c=>c.out.x=80);
+  const paint=c=>c.g.setAttribute('class','client hst '+(c.pend?'wait':c.ok?'ok':''));
+  let queue=[],active=0;
+  const draw=()=>{lamps.forEach((l,i)=>l.classList.toggle('on',i<active));qt.textContent='cola '+queue.length;pill(root,active?(queue.length>2?'saturado':'atendiendo'):'listo',queue.length>2?'bad':active?'warn':'')};
+  async function req(c){
+    c.pend++;paint(c);log('cliente '+(c.i+1)+': <em>GET /video</em>');
+    await fly(pL,[c.out,srvIn],lat()).p;
+    queue.push(c);draw();if(queue.length===4)log('cola de 4: <b class="bad">la cocina no da abasto</b>');pump();
+  }
+  function pump(){while(active<2&&queue.length){const c=queue.shift();active++;draw();serve(c)}}
+  async function serve(c){
+    await sleep(750);active--;draw();
+    log('servidor → cliente '+(c.i+1)+': <b class="good">200 OK</b>');
+    await Promise.all([0,1,2].map(async k=>{await sleep(k*130);return fly(pL,[srvIn,c.out],lat(),{cls:'resp',label:'▶'}).p}));
+    c.pend--;c.ok=true;paint(c);markDone(id);
+    setTimeout(()=>{if(!c.pend){c.ok=false;paint(c)}},1800);pump();draw();
+  }
+  $('[data-all]',root).addEventListener('click',()=>cl.forEach((c,i)=>setTimeout(()=>req(c),i*120)));
+  $('[data-burst]',root).addEventListener('click',()=>{for(let i=0;i<12;i++)setTimeout(()=>req(cl[i%3]),i*90)});
+  log('toca un teléfono para pedir un video. Sube la distancia y verás el retraso');
+}
+
+/* ═════════ SIM 3: Overflow del CAM ═════════ */
+function simCAM(root,id){
+  root.innerHTML=bar('switch-cam.sim')+'<div class="win-body"><svg viewBox="0 0 480 300" role="img" aria-label="Simulación: un atacante llena la tabla CAM de un switch con direcciones falsas y el switch empieza a reenviar todo por todos los puertos"></svg></div>'+
+  '<div class="cam"><div class="cam-h"><span>Tabla CAM del switch</span><span><b data-cnt>6</b>/16 entradas</span></div><div class="cells" data-cells></div></div>'+
+  '<div class="win-ctrl"><button class="btn" data-send>Enviar tráfico A → B</button><button class="btn ghost" data-flood>Inundar con MACs falsas</button><label class="tog"><input type="checkbox" data-ps> Port security</label><button class="btn ghost" data-reset>Reiniciar</button></div><div class="win-log" role="log"></div>';
+  const svg=$('svg',root),log=mkLog(root);
+  const H={A:{x:52,y:55},B:{x:52,y:150},C:{x:52,y:245},D:{x:428,y:55},E:{x:428,y:150},X:{x:428,y:245}},C={x:240,y:150};
+  const eL=G(svg),nL=G(svg),pL=G(svg);
+  Object.values(H).forEach(h=>line(eL,h,C));
+  svgEl('rect',{class:'nd',x:190,y:105,width:100,height:90,rx:9},nL);
+  txt(nL,240,146,'Switch','lbl big');txt(nL,240,163,'reenvía por MAC');
+  const nodes={};for(const k in H)nodes[k]=host(nL,H[k],k==='X'?'X (atacante)':k,k==='X'?'atk':'');
+  const cells=$('[data-cells]',root),cnt=$('[data-cnt]',root);
+  const legit=['A','B','C','D','E','X'];let table,mode,timer,blocked,caught;
+  function paintTable(){cells.innerHTML='';for(let i=0;i<16;i++){const b=document.createElement('b');const e=table[i];if(e){b.className=e.f?'fake':'real';b.textContent=e.f?e.m:e.m}else b.textContent='···';cells.appendChild(b)}cnt.textContent=table.length}
+  function reset(){clearInterval(timer);table=legit.map(k=>({m:k+':'+k.charCodeAt(0).toString(16),f:false}));mode='switch';blocked=false;caught=0;
+    nodes.X.setAttribute('class','hst atk');paintTable();clear(pL);pill(root,'switch normal','good');$('[data-flood]',root).disabled=false}
+  reset();
+  async function send(){
+    if(mode==='switch'){
+      log('A → B: el switch conoce el puerto de B y <b class="good">reenvía solo por ahí</b>');
+      fly(pL,[H.A,C,H.B],1000,{label:'A→B'});
+    }else{
+      log('A → B: MAC desconocida para el switch, <b class="bad">lo copia a todos los puertos</b>');
+      ['B','C','D','E','X'].forEach(k=>fly(pL,[H.A,C,H[k]],1100,{label:k==='B'?'A→B':'copia',cls:k==='B'?'':'bad'}));
+      await sleep(1100);caught++;log('X captura: A → B "GET /intranet/nomina" <b class="bad">(capturas: '+caught+')</b>');
+      markDone(id);
+    }
+  }
+  function flood(){
+    if(mode==='hub'||blocked)return;const ps=$('[data-ps]',root).checked;let fakes=0;
+    $('[data-flood]',root).disabled=true;pill(root,'inundando','warn');log('X emite tramas con <em>MACs de origen falsas</em>…');
+    timer=setInterval(()=>{
+      if(ps&&fakes>=2){clearInterval(timer);blocked=true;nodes.X.setAttribute('class','hst down');pill(root,'puerto bloqueado','good');
+        log('port security: el puerto de X superó 2 MACs. <b class="good">Puerto deshabilitado</b>');markDone(id);return}
+      if(table.length>=16){clearInterval(timer);mode='hub';pill(root,'modo hub','bad');log('tabla CAM llena: el switch <b class="bad">se comporta como un hub</b>');return}
+      table.push({m:hex(2).toUpperCase()+':'+hex(2).toUpperCase(),f:true});fakes++;paintTable();
+    },130);
+  }
+  $('[data-send]',root).addEventListener('click',send);
+  $('[data-flood]',root).addEventListener('click',flood);
+  $('[data-reset]',root).addEventListener('click',()=>{reset();log('tabla restablecida')});
+  log('primero envía tráfico normal, luego inunda la tabla y vuelve a enviar');
+}
+
+/* ═════════ SIM 4: Smurf ═════════ */
+function simSmurf(root,id){
+  root.innerHTML=bar('smurf.sim')+'<div class="win-body"><svg viewBox="0 0 480 310" role="img" aria-label="Simulación: un ping falsificado a la dirección broadcast hace que todos los equipos de la red respondan a la víctima"></svg></div>'+
+  '<div class="win-read"><div><span>amplificación</span><b data-amp>1 → 8</b></div><div><span>carga de la víctima</span><b data-ld>0%</b></div><div><span>estado</span><b data-st>normal</b></div></div>'+
+  '<div class="win-ctrl"><button class="btn" data-go>Lanzar ping falso</button><label class="rng">Equipos <input type="range" min="4" max="14" value="8" data-n aria-label="Equipos en la red"><output data-nv>8</output></label><label class="tog"><input type="checkbox" data-blk> Bloquear broadcast dirigido</label></div><div class="win-log" role="log"></div>';
+  const svg=$('svg',root),log=mkLog(root),nI=$('[data-n]',root);
+  const AT={x:46,y:52},V={x:420,y:262},CC={x:240,y:158},EN={x:128,y:118};
+  const eL=G(svg),cL=G(svg),hL=G(svg),nL=G(svg),pL=G(svg);
+  svgEl('ellipse',{class:'cloud',cx:CC.x,cy:CC.y,rx:118,ry:84},cL);
+  txt(cL,CC.x,60,'Red local (broadcast .255)');
+  line(eL,AT,EN,'dash');
+  host(nL,AT,'Atacante','atk');const vic=host(nL,V,'Víctima');
+  txt(nL,105,72,'ping → broadcast');
+  let hosts=[];
+  function place(){clear(hL);const n=+nI.value;hosts=[];
+    for(let i=0;i<n;i++){const a=i/n*Math.PI*2+.3,p={x:CC.x+Math.cos(a)*70,y:CC.y+16+Math.sin(a)*46};hosts.push(p);
+      svgEl('rect',{class:'nd',x:p.x-9,y:p.y-7,width:18,height:14,rx:3},hL)}
+    $('[data-nv]',root).textContent=n;$('[data-amp]',root).textContent='1 → '+n}
+  place();nI.addEventListener('input',place);
+  let load=0,down=false;
+  const meter=()=>{$('[data-ld]',root).textContent=Math.round(Math.min(100,load))+'%';const s=$('[data-st]',root);s.textContent=down?'caída':'normal';s.style.color=down?'var(--c3)':''};
+  function bump(v){if(down)return;load+=v;if(load>=100){load=100;down=true;vic.setAttribute('class','hst down');pill(root,'víctima caída','bad');log('víctima: <b class="bad">sin capacidad, descarta también tráfico legítimo</b>');markDone(id)}meter()}
+  setInterval(()=>{if(load>0){load=Math.max(0,load-2.4);if(down&&load<30){down=false;vic.setAttribute('class','hst');pill(root,'recuperada','good');log('víctima: <b class="good">se recupera</b>')}meter()}},200);
+  async function go(){
+    log('atacante: ping a la dirección broadcast con <em>origen = IP de la víctima</em>');
+    await fly(pL,[AT,EN],800,{label:'ping',cls:'bad'}).p;
+    if($('[data-blk]',root).checked){
+      const x=G(pL);svgEl('path',{class:'xmark',d:'M'+(EN.x-9)+' '+(EN.y-9)+'l18 18M'+(EN.x+9)+' '+(EN.y-9)+'l-18 18'},x);setTimeout(()=>x.remove(),1400);
+      log('router: ping a broadcast <b class="good">bloqueado</b> (no ip directed-broadcast)');pill(root,'ataque frenado','good');markDone(id);return}
+    await fly(pL,[EN,CC],500,{label:'ping',cls:'bad'}).p;
+    const pu=svgEl('circle',{class:'pulse',cx:CC.x,cy:CC.y,r:12},pL);setTimeout(()=>pu.remove(),1000);
+    log('la red entera lo recibe. Respuestas hacia la víctima: <b class="bad">'+hosts.length+'</b>');pill(root,'respondiendo','warn');
+    hosts.forEach((h,i)=>setTimeout(()=>{fly(pL,[h,V],900,{cls:'resp',label:''}).p.then(()=>bump(5.5))},i*45));
+  }
+  $('[data-go]',root).addEventListener('click',go);
+  log('lanza varios pings seguidos hasta que la víctima caiga; luego prueba el bloqueo');
+}
+
+/* ═════════ SIM 5: DoS / DDoS ═════════ */
+function simDoS(root,id){
+  root.innerHTML=bar('dos.sim')+'<div class="win-body"><canvas aria-label="Partículas que representan peticiones legítimas y maliciosas llegando a un servidor" role="img"></canvas></div>'+
+  '<div class="win-read"><div><span>peticiones/s</span><b data-rps>200</b></div><div><span>capacidad usada</span><b data-load>20%</b></div><div><span>clientes atendidos</span><b data-ok>10/10</b></div></div>'+
+  '<div class="tiles" data-tiles aria-hidden="true"></div>'+
+  '<div class="win-ctrl"><div class="seg" role="group" aria-label="Tipo de ataque"><button data-mode="dos" aria-pressed="false">DoS: un origen</button><button data-mode="ddos" aria-pressed="true">DDoS: miles de orígenes</button></div>'+
+  '<label class="rng">Intensidad <input type="range" min="0" max="100" value="0" data-int><output data-intv>0</output></label>'+
+  '<label class="tog"><input type="checkbox" data-def> Filtro anti-DDoS</label><button class="btn" data-bf>Simular Black Friday</button></div><div class="win-log" role="log"></div>';
+  const cv=$('canvas',root),ctx=cv.getContext('2d'),log=mkLog(root);
+  const CAP=1000,LEGIT=200;let mode='ddos',inten=0,def=false,W=0,H=230,parts=[],vis=false,last=performance.now(),acc=0,prevOk=1,state='sano',shake=0;
+  const botY=Array.from({length:22},(_,i)=>(i+.5)/22);
+  function size(){const r=cv.getBoundingClientRect();const d=Math.min(2,devicePixelRatio||1);W=r.width;cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0)}
+  size();addEventListener('resize',size);
+  function model(){
+    let raw,pass;if(mode==='dos'){raw=Math.min(inten*10,900);pass=def?0:1}else{raw=inten*45;pass=def?.15:1}
+    const eff=raw*pass,total=LEGIT+eff,ok=total<=CAP?1:CAP/total;return{raw:raw,pass:pass,total:total,ok:ok,load:Math.min(1,total/CAP)}
+  }
+  const tiles=$('[data-tiles]',root);for(let i=0;i<10;i++)tiles.appendChild(document.createElement('span'));
+  function readout(){
+    const m=model();$('[data-rps]',root).textContent=Math.round(m.total);$('[data-load]',root).textContent=Math.round(m.load*100)+'%';
+    const n=Math.round(m.ok*10);$('[data-ok]',root).textContent=n+'/10';
+    $$('span',tiles).forEach((s,i)=>{const good=i<n;s.className=good?'':'no';s.textContent=good?'✓':'✕'});
+    const st=m.ok<.5?'saturado':m.ok<1?'lento':'sano';
+    if(st!==state){state=st;if(st==='saturado')log('servidor <b class="bad">saturado</b>: la mayoría de clientes reales no entra');else if(st==='sano')log('servidor <b class="good">estable</b>: atiende a todos los clientes');else log('servidor <em>lento</em>: algunos clientes fallan')}
+    pill(root,st==='sano'?'estable':st==='lento'?'lento':'caído',st==='sano'?'good':st==='lento'?'warn':'bad');
+    return m;
+  }
+  function setInt(v){inten=v;$('[data-int]',root).value=v;$('[data-intv]',root).textContent=v}
+  $('[data-int]',root).addEventListener('input',e=>{setInt(+e.target.value);readout()});
+  $$('[data-mode]',root).forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mode;$$('[data-mode]',root).forEach(x=>x.setAttribute('aria-pressed',x===b));
+    log(mode==='dos'?'un solo origen: su ancho de banda limita el daño':'miles de orígenes: el tráfico se suma sin límite');readout()}));
+  $('[data-def]',root).addEventListener('change',e=>{const before=model().ok;def=e.target.checked;const m=readout();
+    log(def?(mode==='dos'?'filtro: <b class="good">IP del atacante bloqueada</b>':'filtro: se descarta el 85% del tráfico malicioso'):'filtro desactivado');
+    if(def&&before<.6&&m.ok>=.9)markDone(id)});
+  let bf=false;
+  $('[data-bf]',root).addEventListener('click',async()=>{if(bf)return;bf=true;
+    mode='ddos';$$('[data-mode]',root).forEach(x=>x.setAttribute('aria-pressed',x.dataset.mode==='ddos'));
+    log('Black Friday: llegan <b class="bad">miles de peticiones falsas</b>');
+    for(let v=inten;v<=100;v+=4){setInt(v);readout();await sleep(90)}bf=false});
+  onVisible(cv,v=>{vis=v;last=performance.now()});
+  function frame(now){
+    requestAnimationFrame(frame);if(!vis)return;
+    const dt=Math.min(.05,(now-last)/1000);last=now;const m=model();ctx.clearRect(0,0,W,H);
+    const sx=W-72,shieldX=W*.6;
+    // orígenes
+    ctx.fillStyle='#2BD9FF';[.2,.5,.8].forEach(f=>ctx.fillRect(38,H*f-5,10,10));
+    ctx.fillStyle='#FF4D9D';
+    if(mode==='dos')ctx.fillRect(9,H*.5-6,12,12);else botY.forEach(f=>ctx.fillRect(9,H*f-2.5,5,5));
+    // escudo
+    if(def){ctx.strokeStyle='#2CFFB5';ctx.lineWidth=3;ctx.setLineDash([8,6]);ctx.beginPath();ctx.moveTo(shieldX,10);ctx.lineTo(shieldX,H-10);ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle='#2CFFB5';ctx.font='500 10px JetBrains Mono, monospace';ctx.textAlign='center';ctx.fillText('filtro',shieldX,H-1)}
+    // spawn
+    acc+=dt*Math.min(320,(LEGIT+m.raw)/9);
+    while(acc>=1){acc--;const pb=m.raw/(LEGIT+m.raw);const bad=Math.random()<pb;
+      const y=bad?(mode==='dos'?H*.5:H*botY[rnd(0,botY.length-1)]):H*[.2,.5,.8][rnd(0,2)];
+      parts.push({x:bad?14:50,y:y+(Math.random()-.5)*4,bad:bad,ty:H*.5+(Math.random()-.5)*70,drop:bad&&Math.random()>m.pass})}
+    // partículas
+    const sp=W*.42;
+    parts=parts.filter(p=>{
+      p.x+=sp*dt;const f=(p.x)/sx;p.y+=(p.ty-p.y)*Math.min(1,dt*1.6);
+      if(p.drop&&p.x>=shieldX){return false}
+      if(p.x>=sx){if(!p.bad&&m.ok<1&&Math.random()>m.ok)shake=.25;return false}
+      ctx.fillStyle=p.bad?'#FF4D9D':'#2BD9FF';ctx.fillRect(p.x-2.5,p.y-2.5,5,5);return true;
+    });
+    // servidor
+    shake=Math.max(0,shake-dt);const ox=m.load>=1?(Math.random()-.5)*4:0;
+    ctx.fillStyle=m.load>=1?'#FF4D9D':m.load>.7?'#FFC933':'#2CFFB5';
+    ctx.fillRect(sx+ox,H/2-52,52,104);
+    ctx.fillStyle='#07081A';for(let i=0;i<3;i++)ctx.fillRect(sx+8+ox,H/2-40+i*30,36,18);
+    ctx.fillStyle='#D9F4FF';ctx.font='500 10px JetBrains Mono, monospace';ctx.textAlign='center';ctx.fillText('servidor',sx+26,H/2+68);
+    ctx.textAlign='left';ctx.fillStyle='#8E97DB';ctx.fillText('clientes reales',30,12);ctx.fillStyle='#FF4D9D';ctx.fillText(mode==='dos'?'1 atacante':'bots',16,H-4);
+  }
+  requestAnimationFrame(frame);readout();
+  log('sube la intensidad, cambia entre DoS y DDoS y activa el filtro');
+}
+
+/* ═════════ SIM 6: Spoofing ═════════ */
+function simSpoof(root,id){
+  root.innerHTML=bar('spoofing.sim')+
+  '<div class="win-tabs" role="tablist" aria-label="Tipo de suplantación"><button role="tab" aria-selected="true" data-t="mail" id="sp-t1" aria-controls="sp-p1">Correo falso</button><button role="tab" aria-selected="false" data-t="pkt" id="sp-t2" aria-controls="sp-p2" tabindex="-1">Paquete con IP falsa</button></div>'+
+  '<div class="win-pane" data-pane="mail" id="sp-p1" role="tabpanel" aria-labelledby="sp-t1">'+
+    '<div class="mail"><div class="mail-h"><div class="av" aria-hidden="true">BS</div><div><button class="flag" data-f="name" data-decoy="1"><b>Banco Seguro</b></button> <button class="flag" data-f="dom">&lt;soporte@banco-segur0.com&gt;</button><div>Asunto: <button class="flag" data-f="urg">Acción urgente: su cuenta será bloqueada en 24 horas</button></div></div></div>'+
+    '<p><button class="flag" data-f="gen">Estimado cliente:</button></p>'+
+    '<p>Detectamos actividad inusual en su cuenta. <button class="flag" data-f="cred">Confirme su usuario y contraseña</button> para mantener el acceso.</p>'+
+    '<p><button class="btn-mail flag" data-f="url" title="Destino real: http://verifica-cuenta.example/login">Verificar mi cuenta ahora</button></p></div>'+
+    '<p class="count"><b data-cnt>0/5</b> señales encontradas. Toca lo que te parezca sospechoso.</p><ul class="finds"></ul>'+
+    '<div class="win-ctrl" style="padding-left:0"><button class="btn ghost" data-reveal>Revelar todas</button></div></div>'+
+  '<div class="win-pane" data-pane="pkt" id="sp-p2" role="tabpanel" aria-labelledby="sp-t2" hidden>'+
+    '<div class="fw">Regla del cortafuegos: <code>permitir origen 10.0.0.0/24</code></div>'+
+    '<div class="ipk">origen: <code data-src>203.0.113.9</code> (tu IP real)<br>destino: <code>10.0.0.1</code><br>datos: <code>intento de acceso por SSH</code></div>'+
+    '<div class="win-ctrl" style="padding-left:0;padding-right:0"><button class="btn ghost" data-real>Enviar con mi IP real</button><button class="btn" data-fake>Falsificar IP de origen</button></div>'+
+    '<div class="verdict" data-verdict aria-live="polite">Elige cómo enviar el paquete.</div></div>'+
+  '<div class="win-log" role="log"></div>';
+  const log=mkLog(root);
+  const tabs=$$('[data-t]',root);
+  tabs.forEach((b,i)=>{
+    const sel=()=>{tabs.forEach((x,j)=>{x.setAttribute('aria-selected',j===i);x.tabIndex=j===i?0:-1});$$('[data-pane]',root).forEach(p=>p.hidden=p.dataset.pane!==b.dataset.t)};
+    b.addEventListener('click',sel);
+    b.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const n=tabs[(i+1)%2];n.click();n.focus()}});
+  });
+  const info={
+    dom:'Remitente: el dominio dice <em>banco-segur0.com</em> (con un cero). No es el del banco real.',
+    urg:'Urgencia: te apuran para que actúes sin pensar.',
+    gen:'Saludo genérico: tu banco te llamaría por tu nombre.',
+    cred:'Petición de credenciales: ningún banco te pide la contraseña por correo.',
+    url:'Enlace engañoso: el texto promete una cosa y el destino real es <em>verifica-cuenta.example</em>.',
+    name:'El nombre visible se escribe a mano y no prueba nada. Mira la dirección real.'
+  };
+  const found=new Set(),list=$('.finds',root);
+  function flag(k,el){
+    if(k==='name'){log('<span class="bad">pista falsa:</span> '+info.name);return}
+    if(found.has(k))return;found.add(k);el.classList.add('found');
+    const li=document.createElement('li');li.innerHTML=info[k];list.appendChild(li);
+    $('[data-cnt]',root).textContent=found.size+'/5';log('señal encontrada: '+info[k]);
+    if(found.size===5){pill(root,'phishing detectado','good');log('<b class="good">Las 5 señales encontradas</b>');markDone(id)}
+  }
+  $$('[data-f]',root).forEach(el=>el.addEventListener('click',e=>{e.preventDefault();flag(el.dataset.f,el)}));
+  $('[data-reveal]',root).addEventListener('click',()=>$$('[data-f]:not([data-decoy])',root).forEach(el=>flag(el.dataset.f,el)));
+  const v=$('[data-verdict]',root);
+  $('[data-real]',root).addEventListener('click',()=>{
+    $('[data-src]',root).textContent='203.0.113.9';
+    v.className='verdict good';v.innerHTML='<b>DENEGADO</b>: 203.0.113.9 no está en 10.0.0.0/24.';log('cortafuegos: paquete desde 203.0.113.9 <b class="good">denegado</b>');pill(root,'bloqueado','good')});
+  $('[data-fake]',root).addEventListener('click',()=>{
+    $('[data-src]',root).textContent='10.0.0.7';
+    v.className='verdict bad';v.innerHTML='<b>PERMITIDO</b>: el cortafuegos confió en una IP de origen que el atacante escribió a mano.';
+    log('cortafuegos: origen 10.0.0.7 <b class="bad">permitido</b> (la IP era falsa)');pill(root,'suplantación lograda','bad');markDone(id)});
+  log('busca las 5 señales del correo o prueba el paquete con IP falsa');
+}
+
+/* ═════════ SIM 7: Secuestro de sesiones ═════════ */
+function simHijack(root,id){
+  root.innerHTML=bar('session-hijack.sim')+'<div class="win-body"><svg viewBox="0 0 480 300" role="img" aria-label="Simulación: un atacante en la misma red intercepta la cookie de sesión de un usuario y la reutiliza"></svg></div>'+
+  '<div class="tokens"><div>cookie de ana<b data-u>—</b></div><div>lo que ve el atacante<b data-a>—</b></div><div>sitio web<b data-s>sin sesión</b></div></div>'+
+  '<div class="win-ctrl"><div class="seg" role="group" aria-label="Tipo de red"><button data-net="open" aria-pressed="true">Wi-Fi pública (HTTP)</button><button data-net="tls" aria-pressed="false">HTTPS</button></div></div>'+
+  '<div class="win-ctrl" style="border-top:0;padding-top:0"><button class="btn" data-login>1. Ana inicia sesión</button><button class="btn" data-steal disabled>2. Usar cookie robada</button><button class="btn ghost" data-out>Ana cierra sesión</button></div><div class="win-log" role="log"></div>';
+  const svg=$('svg',root),log=mkLog(root),login=$('[data-login]',root),steal=$('[data-steal]',root);
+  const U={x:62,y:100},S={x:418,y:100},AT={x:240,y:246},MID={x:240,y:100};
+  const eL=G(svg),nL=G(svg),pL=G(svg);
+  line(eL,{x:90,y:100},{x:390,y:100});line(eL,MID,{x:240,y:222},'dash');
+  const chanTxt=txt(nL,240,80,'canal sin cifrar');
+  host(nL,U,'Ana');host(nL,S,'Sitio web');const atk=host(nL,AT,'Atacante (sniffer)','atk');
+  svgEl('rect',{class:'nd',x:404,y:120,width:28,height:0},nL);
+  let secure=false,token=null,valid=false,stolen=null,busy=false;
+  const set=(k,v,lit)=>{const e=$('[data-'+k+']',root);e.textContent=v;e.classList.toggle('lit',!!lit)};
+  $$('[data-net]',root).forEach(b=>b.addEventListener('click',()=>{
+    secure=b.dataset.net==='tls';$$('[data-net]',root).forEach(x=>x.setAttribute('aria-pressed',x===b));
+    chanTxt.textContent=secure?'canal cifrado (HTTPS)':'canal sin cifrar';log(secure?'red: tráfico <b class="good">cifrado</b> de extremo a extremo':'red: Wi-Fi pública, tráfico <b class="bad">en texto claro</b>')}));
+  async function doLogin(){
+    if(busy)return;busy=true;login.disabled=true;steal.disabled=true;token=hex(8);valid=false;stolen=null;set('u','—');set('a','—');set('s','sin sesión');pill(root,'iniciando','warn');
+    log('Ana → sitio: usuario y clave (solo esta vez)');
+    await fly(pL,[U,S],900,{label:'clave',cls:'cy'}).p;valid=true;
+    log('sitio → Ana: <em>Set-Cookie: session='+token+'</em>');set('s','sesión de ana activa');
+    const f=fly(pL,[S,U],1300,{cls:'ck',label:'ID'});
+    await sleep(650);
+    if(!secure){
+      fly(pL,[MID,AT],700,{cls:'bad',label:'ID'});await sleep(700);
+      stolen=token;set('a','session='+token,true);log('sniffer: <b class="bad">cookie capturada en texto claro</b>');pill(root,'cookie expuesta','bad');steal.disabled=false;
+    }else{
+      fly(pL,[MID,AT],700,{cls:'bad',label:'▒▒'});await sleep(700);
+      set('a','session=▒▒▒▒▒▒▒▒');log('sniffer: solo ve datos cifrados. <b class="good">Nada que reutilizar</b>');pill(root,'sesión protegida','good');markDone(id);
+    }
+    await f.p;set('u','session='+token);login.disabled=false;busy=false;
+  }
+  async function doSteal(){
+    if(busy||!stolen)return;busy=true;steal.disabled=true;log('atacante → sitio: petición con <em>session='+stolen+'</em>');
+    await fly(pL,[AT,S],1000,{cls:'bad',label:'ID'}).p;
+    if(valid&&stolen===token){log('sitio: cookie válida. <b class="bad">Abre el perfil de Ana</b> sin pedir contraseña');set('s','perfil de ana abierto por el atacante',true);pill(root,'sesión secuestrada','bad');markDone(id)}
+    else{log('sitio: <b class="good">401 sesión no válida</b>. La cookie robada ya no sirve');pill(root,'ataque fallido','good');markDone(id)}
+    busy=false;
+  }
+  function doOut(){
+    if(!token)return log('primero inicia sesión');
+    valid=false;set('u','—');set('s','sin sesión');log('Ana cierra sesión: el sitio <b class="good">invalida el token</b>');
+    if(stolen)steal.disabled=false;
+  }
+  login.addEventListener('click',doLogin);steal.addEventListener('click',doSteal);$('[data-out]',root).addEventListener('click',doOut);
+  log('inicia sesión en Wi-Fi pública, roba la cookie y luego repite con HTTPS');
+}
+
+const SIMS={tcp:simTCP,cs:simCS,cam:simCAM,smurf:simSmurf,dos:simDoS,spoof:simSpoof,hijack:simHijack};
+$$('[data-sim]').forEach(r=>{const st=r.closest('.story');r.style.setProperty('--kk',getComputedStyle(st.closest('.chapter')).getPropertyValue('--k')||'var(--c1)');
+  r.style.setProperty('--k','var(--ck)');SIMS[r.dataset.sim](r,st.id)});
+/* el color de cada ventana viene de su capítulo */
+$$('.chapter').forEach(c=>{const k=c.getAttribute('style').match(/--k:([^;]+)/)[1];$$('.win',c).forEach(w=>{w.style.setProperty('--k',k)})});
+
+/* ───────── Portada: red interactiva ───────── */
+(function(){
+  const cv=$('#net'),ctx=cv.getContext('2d'),title=$('#titleTxt'),h1=$('#title');
+  let W=0,H=0,nodes=[],adj=[],pk=[],rp=[],hover=-1,sent=0,hops=0,vis=true,acc=0,last=performance.now(),scr=false;
+  const COL=['#6A85FF','#2CFFB5','#FF4D9D','#FFC933','#2BD9FF'];
+  function rng(s){return()=>(s=(s*1664525+1013904223)>>>0)/4294967296}
+  function build(){
+    const r=cv.getBoundingClientRect();W=r.width;H=r.height;const d=Math.min(2,devicePixelRatio||1);cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0);
+    const n=Math.max(14,Math.min(34,Math.round(W*H/26000))),R=rng(11),gap=Math.min(120,W/8);nodes=[];pk=[];
+    let tries=0;while(nodes.length<n&&tries<3000){tries++;const x=30+R()*(W-60),y=70+R()*(H-110);if(nodes.every(o=>Math.hypot(o.x-x,o.y-y)>gap))nodes.push({x:x,y:y,r:4+R()*3,ip:'10.0.'+rnd(0,9)+'.'+rnd(2,250)})}
+    adj=nodes.map(()=>new Set());
+    nodes.forEach((a,i)=>{nodes.map((b,j)=>[j,Math.hypot(a.x-b.x,a.y-b.y)]).filter(p=>p[0]!==i).sort((p,q)=>p[1]-q[1]).slice(0,3).forEach(p=>{adj[i].add(p[0]);adj[p[0]].add(i)})});
+  }
+  function bfs(a,b){const prev=new Map([[a,-1]]),q=[a];while(q.length){const c=q.shift();if(c===b)break;adj[c].forEach(n=>{if(!prev.has(n)){prev.set(n,c);q.push(n)}})}
+    if(!prev.has(b))return null;const path=[];for(let c=b;c!==-1;c=prev.get(c))path.unshift(c);return path}
+  function send(a){if(!nodes.length)return;for(let t=0;t<12;t++){const b=rnd(0,nodes.length-1);if(b===a)continue;const p=bfs(a,b);if(p&&p.length>1){pk.push({path:p,s:0,d:0,col:COL[rnd(0,4)]});return}}}
+  function hud(){$('#pktCount').textContent=sent;$('#hopAvg').textContent=sent?(hops/sent).toFixed(1):'0.0'}
+  function near(e,rad){const r=cv.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;let bi=-1,bd=rad;nodes.forEach((n,i)=>{const d=Math.hypot(n.x-x,n.y-y);if(d<bd){bd=d;bi=i}});return{i:bi,x:x,y:y}}
+  function scramble(final,ms){if(RM||scr)return;scr=true;const ch='01#$%&<>/|[]{}';const t0=performance.now();
+    (function s(now){const k=Math.min(1,(now-t0)/ms);title.textContent=Array.from(final).map((c,i)=>i/final.length<k?c:ch[Math.random()*ch.length|0]).join('');if(k<1)requestAnimationFrame(s);else{title.textContent=final;scr=false}})(t0)}
+  cv.addEventListener('pointermove',e=>{const q=near(e,40);hover=q.i;
+    const tr=h1.getBoundingClientRect(),cr=cv.getBoundingClientRect();
+    if(e.clientX>tr.left&&e.clientX<tr.right&&e.clientY>tr.top&&e.clientY<tr.bottom)scramble('Paquetes',600)});
+  cv.addEventListener('pointerleave',()=>hover=-1);
+  cv.addEventListener('pointerdown',e=>{const q=near(e,52);if(q.i>=0){hover=q.i;send(q.i)}});
+  onVisible(cv,v=>{vis=v;last=performance.now()});
+  addEventListener('resize',build);build();
+  function loop(now){
+    requestAnimationFrame(loop);if(!vis)return;const dt=Math.min(.05,(now-last)/1000);last=now;
+    if(!RM){acc+=dt;if(acc>1.1){acc=0;send(rnd(0,nodes.length-1))}}
+    ctx.clearRect(0,0,W,H);ctx.lineWidth=1;
+    adj.forEach((s,i)=>s.forEach(j=>{if(j<i)return;const hi=hover===i||hover===j;ctx.strokeStyle=hi?'rgba(43,217,255,.85)':'rgba(120,140,255,.22)';ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.stroke()}));
+    rp=rp.filter(r=>{r.r+=70*dt;const a=1-r.r/56;if(a<=0)return false;ctx.strokeStyle=r.col;ctx.globalAlpha=a;ctx.lineWidth=2;ctx.beginPath();ctx.arc(r.x,r.y,r.r,0,7);ctx.stroke();ctx.globalAlpha=1;return true});
+    nodes.forEach((n,i)=>{const h=i===hover;ctx.beginPath();ctx.arc(n.x,n.y,h?n.r+3:n.r,0,7);ctx.fillStyle=h?'#2BD9FF':'#0E1030';ctx.fill();ctx.strokeStyle=h?'#fff':'#6A85FF';ctx.lineWidth=2;ctx.stroke()});
+    if(hover>=0){const n=nodes[hover];ctx.font='500 11px JetBrains Mono, monospace';ctx.fillStyle='#D9F4FF';ctx.textAlign='left';ctx.fillText(n.ip,n.x+12,n.y-10)}
+    pk=pk.filter(p=>{
+      const a=nodes[p.path[p.s]],b=nodes[p.path[p.s+1]],L=Math.hypot(b.x-a.x,b.y-a.y);p.d+=300*dt;
+      if(p.d>=L){p.s++;p.d=0;if(p.s>=p.path.length-1){const e=nodes[p.path[p.path.length-1]];rp.push({x:e.x,y:e.y,r:4,col:p.col});sent++;hops+=p.path.length-1;hud();return false}return true}
+      const f=p.d/L,x=a.x+(b.x-a.x)*f,y=a.y+(b.y-a.y)*f,ux=(b.x-a.x)/L,uy=(b.y-a.y)/L;
+      ctx.strokeStyle=p.col;ctx.globalAlpha=.5;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x-ux*18,y-uy*18);ctx.lineTo(x,y);ctx.stroke();ctx.globalAlpha=1;
+      ctx.fillStyle=p.col;ctx.shadowColor=p.col;ctx.shadowBlur=12;ctx.fillRect(x-4.5,y-4.5,9,9);ctx.shadowBlur=0;return true;
+    });
+  }
+  requestAnimationFrame(loop);
+  // Texto tecleado y descifrado inicial
+  const line='$ traceroute --interceptar tus-datos',typed=$('#typed');
+  if(RM){typed.textContent=line}else{let i=0;(function t(){typed.textContent=line.slice(0,i);if(i++<line.length)setTimeout(t,42)})();scramble('Paquetes',1100)}
+})();
+
+/* ───────── Prueba ───────── */
+(function(){
+  const NAMES={tcpip:'TCP/IP',cliente:'Cliente/servidor',cam:'Overflow del CAM',smurf:'Smurfing',dos:'DoS y DDoS',spoofing:'Spoofing',hijack:'Secuestro de sesiones'};
+  const Q=[
+    {a:'tcpip',t:'Una carta con la dirección escrita en el sobre, y un cartero que verifica que llegaron todas las páginas y en orden.',w:'IP pone la dirección y TCP comprueba que todo llegue completo y ordenado.'},
+    {a:'cliente',t:'Un comensal hace el pedido al mesero y la cocina prepara el plato y lo entrega.',w:'El cliente pide, el servidor procesa y responde.'},
+    {a:'cam',t:'Un guardia de discoteca cuya libreta de invitados se llena de nombres falsos, así que abre la puerta a todos.',w:'La tabla CAM llena hace que el switch se comporte como un hub.'},
+    {a:'smurf',t:'Alguien grita una pregunta con un megáfono en una plaza fingiendo ser otra persona, y toda la plaza le responde a esa persona.',w:'Un ping al broadcast con la IP de la víctima como origen.'},
+    {a:'dos',t:'Cientos de personas bloquean a propósito la puerta de un banco para que ningún cliente real pueda entrar.',w:'Saturar un servicio con tráfico falso; si viene de miles de equipos, es DDoS.'},
+    {a:'spoofing',t:'Alguien entra a un área restringida con un uniforme de técnico robado y una identificación falsa.',w:'El atacante se hace pasar por un dispositivo, una IP o un usuario legítimo.'},
+    {a:'hijack',t:'Le roban la tarjeta digital de la habitación a un huésped que ya abrió la puerta y entró.',w:'Con el ID de sesión robado no hace falta la contraseña.'}
+  ];
+  const box=$('#quizBox');let order,i,score,streak,best=store.get('paquetes:best',0),res;
+  const shuffle=a=>{a=a.slice();for(let k=a.length-1;k>0;k--){const j=rnd(0,k);[a[k],a[j]]=[a[j],a[k]]}return a};
+  function start(){order=shuffle(Q);i=0;score=0;streak=0;res=[];show()}
+  function show(){
+    if(i>=order.length)return end();
+    const q=order[i],opts=shuffle([q.a].concat(shuffle(Object.keys(NAMES).filter(k=>k!==q.a)).slice(0,3)));
+    box.innerHTML='<div class="q-top"><span>Pregunta '+(i+1)+' de '+order.length+'</span><span class="dots" aria-hidden="true">'+order.map((_,k)=>'<i class="'+(k<res.length?(res[k]?'y':'n'):k===i?'now':'')+'"></i>').join('')+'</span><span>Racha: <b style="color:var(--amber)">'+streak+'</b></span></div>'+
+      '<p class="q-t">'+q.t+'</p><div class="opts">'+opts.map(k=>'<button class="opt" data-k="'+k+'">'+NAMES[k]+'</button>').join('')+'</div><div data-fb aria-live="polite"></div>';
+    $$('.opt',box).forEach(b=>b.addEventListener('click',()=>answer(b,q)));
+  }
+  function answer(b,q){
+    const ok=b.dataset.k===q.a;res.push(ok);if(ok){score++;streak++}else streak=0;
+    $$('.opt',box).forEach(o=>{o.disabled=true;if(o.dataset.k===q.a){o.classList.add('right');o.textContent='✓ '+o.textContent}else if(o===b){o.classList.add('wrong');o.textContent='✕ '+o.textContent}});
+    const fb=$('[data-fb]',box);fb.innerHTML='<p class="why"><b>'+(ok?'Correcto. ':'Era '+NAMES[q.a]+'. ')+'</b>'+q.w+'</p><button class="btn q-next" style="--k:var(--amber)">'+(i+1<order.length?'Siguiente':'Ver resultado')+'</button>';
+    const nx=$('.q-next',fb);nx.focus();nx.addEventListener('click',()=>{i++;show();const f=$('.opt',box);if(f)f.focus({preventScroll:true})});
+  }
+  function end(){
+    if(score>best){best=score;store.set('paquetes:best',best)}
+    const msg=score===7?'Dominas los siete conceptos.':score>=5?'Muy bien. Repasa los que fallaste.':'Vuelve a los simuladores y prueba de nuevo.';
+    box.innerHTML='<div class="q-top"><span>Resultado final</span><span>Mejor marca: '+best+'/7</span></div><div class="big-score" role="status">'+score+'/7</div><p class="q-t">'+msg+'</p><button class="btn" style="--k:var(--c2)" data-again>Jugar otra vez</button>';
+    $('[data-again]',box).addEventListener('click',start);
+  }
+  start();
+})();
+
+/* ───────── Tabla ───────── */
+$$('.rowbtn').forEach(b=>b.addEventListener('click',()=>{const tr=b.closest('tr'),dt=tr.nextElementSibling,open=b.getAttribute('aria-expanded')==='true';b.setAttribute('aria-expanded',!open);dt.hidden=open}));
+$$('.chip').forEach(c=>c.addEventListener('click',()=>{
+  $$('.chip').forEach(x=>x.setAttribute('aria-pressed',x===c));const f=c.dataset.f;
+  $$('tbody tr').forEach(tr=>{const show=f==='all'||tr.dataset.ch===f;if(tr.classList.contains('main'))tr.hidden=!show;else if(!show)tr.hidden=true;else tr.hidden=tr.previousElementSibling.querySelector('.rowbtn').getAttribute('aria-expanded')!=='true'})}));
+
+/* ───────── Paleta de comandos ───────── */
+(function(){
+  const pal=$('#pal'),q=$('#palQ'),ul=$('#palL');
+  const items=[{t:'Portada',h:'#portada'},{t:'Índice',h:'#indice'}].concat($$('.story').map(s=>({t:s.dataset.title,h:'#'+s.id,d:s.dataset.done})),[{t:'Prueba: ¿qué analogía es cuál?',h:'#quiz'},{t:'Resumen de los cinco ataques',h:'#resumen'}]);
+  let shown=[],sel=0;
+  const norm=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  function render(){const v=norm(q.value);shown=items.filter(x=>norm(x.t).includes(v));sel=Math.min(sel,Math.max(0,shown.length-1));
+    ul.innerHTML='';shown.forEach((x,i)=>{const li=document.createElement('li');li.setAttribute('role','option');li.setAttribute('aria-selected',i===sel);li.innerHTML='<span>'+x.t+'</span><span>'+(x.d&&done.has(x.d)?'probado':'')+'</span>';li.addEventListener('click',()=>go(x));ul.appendChild(li)});
+    if(!shown.length)ul.innerHTML='<li aria-selected="false">Sin resultados</li>'}
+  function go(x){pal.close();location.hash=x.h}
+  function open(){q.value='';sel=0;render();if(pal.showModal)pal.showModal();else pal.setAttribute('open','');q.focus()}
+  $('#cmdBtn').addEventListener('click',open);
+  q.addEventListener('input',()=>{sel=0;render()});
+  q.addEventListener('keydown',e=>{
+    if(e.key==='ArrowDown'){e.preventDefault();sel=Math.min(shown.length-1,sel+1);render()}
+    else if(e.key==='ArrowUp'){e.preventDefault();sel=Math.max(0,sel-1);render()}
+    else if(e.key==='Enter'&&shown[sel]){e.preventDefault();go(shown[sel])}
+  });
+  pal.addEventListener('click',e=>{if(e.target===pal)pal.close()});
+  addEventListener('keydown',e=>{
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();open()}
+    else if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)&&!pal.open){e.preventDefault();open()}
+  });
+})();
+
+/* ───────── Progreso de lectura y capítulo activo ───────── */
+(function(){
+  const bar=$('#progBar'),chips=$$('.chips a'),secs=chips.map(a=>$(a.getAttribute('href')));let tick=false;
+  function upd(){tick=false;const h=document.documentElement.scrollHeight-innerHeight;bar.style.width=(h>0?scrollY/h*100:0)+'%';
+    const mid=scrollY+innerHeight*.35;let cur=-1;secs.forEach((s,i)=>{if(s&&s.offsetTop<=mid)cur=i});
+    chips.forEach((a,i)=>a.setAttribute('aria-current',i===cur))}
+  addEventListener('scroll',()=>{if(!tick){tick=true;requestAnimationFrame(upd)}},{passive:true});upd();
+})();
+
+renderDone();
+})();
+</script>
+</body>
+</html>
